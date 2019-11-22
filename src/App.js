@@ -8,6 +8,7 @@ import {
 import Home from './Home'
 import Series from './Series'
 import NewSeries from './NewSeries'
+import EditSeries from './EditSeries'
 
 // functional-stateless component
 const About = () => <section className="intro-section"><p><h1>Sobre</h1></p></section>
@@ -19,10 +20,10 @@ class App extends Component {
       <Router>
         <div>
           <nav className="navbar navbar-default navbar-fixed-top" role="navigation">
-            <div className="container">
+            <div>
               <div className="navbar-header page-scroll">
                 <a className="navbar-brand page-scroll" href="/">
-                    <img src="images/logo.png" height="30" />
+                    <img src="/images/logo.png" height="30" />
                 </a>
               </div>
 
@@ -44,6 +45,7 @@ class App extends Component {
           </nav>
 
           <Route exact path='/' component={Home} />
+          <Route exact path='/Series/edit/:id' component={EditSeries} />
           <Route exact path='/Series/:genre' component={Series} />
           <Route exact path='/new' component={NewSeries} />
           <Route exact path='/about' component={About} />

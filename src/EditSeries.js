@@ -9,7 +9,7 @@ const statuses = {
     'toWatch': 'Assistir'
 }
 
-class NewSeries extends Component {
+class EditSeries extends Component {
 
     constructor(props) {
         super(props)
@@ -17,7 +17,8 @@ class NewSeries extends Component {
         this.state = {
           genres: [],
           isLoading: false,
-          redirect: false
+          redirect: false,
+          series: {}
         }
 
         this.saveSeries = this.saveSeries.bind(this)
@@ -26,6 +27,15 @@ class NewSeries extends Component {
     componentDidMount() {
         this.setState({ isLoading: true })
         
+        api.loadSeriesById(this.props.match.params.id)
+            .then((res) => {
+                this.setState({ series: res.data })
+                this.refs.name.value = this.state.series.name
+                this.refs.status.value = this.state.series.status
+                this.refs.genre.value = this.state.series.genre
+                this.refs.comments.value = this.state.series.comments
+            })
+
         api.loadGenres()
             .then((res) => {
                 this.setState({
@@ -37,12 +47,13 @@ class NewSeries extends Component {
 
     saveSeries() {
         const newSeries = {
+            id: this.props.match.params.id,
             name: this.refs.name.value,
             status: this.refs.status.value,
             genre: this.refs.genre.value,
             comments: this.refs.comments.value
         }
-        api.saveSeries(newSeries)
+        api.updateSeries(newSeries)
             .then((res) => {
                 this.setState({
                     redirect: '/series/'+this.refs.genre.value
@@ -56,11 +67,11 @@ class NewSeries extends Component {
                 { this.state.redirect &&
                     <Redirect to={ this.state.redirect } />
                 }
-                <h1>Nova Série</h1>
+                <h1>Editar Série</h1>
                 <form>
                     <div className="form-group">
                         <label>Nome:</label>
-                        <input type="text" ref="name" className="form-control" />
+                        <input type="text" ref="name" defaultValue={this.state.series.nam} className="form-control" />
                     </div>
                     <div className="form-group">
                         <label>Comentários:</label>
@@ -90,4 +101,4 @@ class NewSeries extends Component {
     }
 }
 
-export default NewSeries
+export default EditSeries
